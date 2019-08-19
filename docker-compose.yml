@@ -1,0 +1,49 @@
+version: "3.0"
+
+networks:
+  employee:
+
+services:
+   mysql:
+      image: mysql:8.0.17
+      container_name: database
+      restart: always
+      environment:
+        MYSQL_DATABASE: db_employee
+        MYSQL_USER: user
+        MYSQL_ROOT_PASSWORD: password
+        ports:
+          -3306:3306
+
+
+   springboot:
+        image: em-backend
+        container_name: springboot
+        build: ./employee
+        restart: on-failure
+        environment:
+          - timezone=Europe/Berlin
+        depends_on:
+          - mysql
+        networks:
+          - employee
+        expose:
+          - 8080
+        ports:
+          - 8080:8080
+
+   app:
+      image: em-frontend
+      container_name: angular
+      build: ./employee-app
+      restart: on-failure
+      environment:
+        - timezone=Europe/Berlin
+        - VUE_APP_API_URL='http://localhost:4200/'
+      networks:
+        - employee
+      expose:
+        - 4200
+      ports:
+        - 4200:4200
+
