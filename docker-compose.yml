@@ -1,49 +1,56 @@
 version: "3.0"
 
-networks:
-  employee:
-
 services:
-   mysql:
+#   keycloack:
+#     image: jboss/keycloack:6.0.1
+#     environment:
+#        KEYCLOACK_PASSWORD: admin123
+#        keycloack_user: admin
+#      ports:
+#      - "8080:8080"
+#      - "8181:8181"
+#      comman:
+#      - "-b"
+#      - "0.0.0.0"
+#      networks:
+#        - employee_network
+
+   db:
       image: mysql:8.0.17
-      container_name: database
       restart: always
       environment:
         MYSQL_DATABASE: db_employee
         MYSQL_USER: user
-        MYSQL_ROOT_PASSWORD: password
-        ports:
-          -3306:3306
+        MYSQL_PASSWORD: password
+        MYSQL_ROOT_PASSWORD: root_pw
+      ports:
+        - 3306:3306
+      networks:
+        - employee_network
 
-
-   springboot:
+   backend:
         image: em-backend
-        container_name: springboot
         build: ./employee
-        restart: on-failure
         environment:
           - timezone=Europe/Berlin
+          - spring_datasource_url=jdbc:mysql://db:3306/db_employee
         depends_on:
-          - mysql
-        networks:
-          - employee
-        expose:
-          - 8080
+          - db
         ports:
           - 8080:8080
+        networks:
+          - employee_network
 
    app:
-      image: em-frontend
-      container_name: angular
+      image: employee-app
       build: ./employee-app
-      restart: on-failure
       environment:
         - timezone=Europe/Berlin
         - VUE_APP_API_URL='http://localhost:4200/'
-      networks:
-        - employee
-      expose:
-        - 4200
       ports:
-        - 4200:4200
+        - 80:80
+      networks:
+        - employee_network
 
+networks:
+  employee_network:

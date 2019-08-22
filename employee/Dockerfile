@@ -1,7 +1,8 @@
-FROM openjdk:8-jdk-alpine as build
+FROM openjdk:8-jdk-alpine
 
-WORKDIR employee
-COPY target/employee-0.0.1-SNAPSHOT.jar employee
+RUN mkdir /employee
+WORKDIR /employee
+COPY target/employee.jar .
 
 EXPOSE 8080
-CMD ["java", "-jar", "employee-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "employee.jar"]
