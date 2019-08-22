@@ -41,8 +41,8 @@ services:
         networks:
           - employee_network
 
-   app:
-      image: employee-app
+   frontend:
+      image: em-frontend
       build: ./employee-app
       environment:
         - timezone=Europe/Berlin
