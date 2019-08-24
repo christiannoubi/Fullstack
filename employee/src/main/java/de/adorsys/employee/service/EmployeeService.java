@@ -1,5 +1,6 @@
 package de.adorsys.employee.service;
 import de.adorsys.employee.domain.Employee;
+import org.springframework.data.domain.Sort;
 import de.adorsys.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,14 @@ public class EmployeeService {
     EmployeeRepository employeeRepository;
 
    public List<Employee> getEmployees() {
-       return employeeRepository.findAll();
+       return employeeRepository.findAll(sortByIdAsc());
    }
 
-   public Optional<Employee> getEmployee (Long id) {
+    private Sort sortByIdAsc() {
+        return new Sort(Sort.Direction.ASC, "id");
+    }
+
+    public Optional<Employee> getEmployee (Long id) {
        return employeeRepository.findById(id);
    }
 

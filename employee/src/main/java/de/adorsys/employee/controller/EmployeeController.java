@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/employee")
 @CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
     @Autowired
@@ -43,8 +43,8 @@ public class EmployeeController {
     // save or add a Employee
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity <?>save(@RequestBody Employee employee) {
-        employeeService.save(employee);
-        return  new ResponseEntity<Object>(employeeService.getEmployees(), HttpStatus.OK);
+        Employee savedEmployee = employeeService.save(employee);
+        return  new ResponseEntity<Object>(savedEmployee, HttpStatus.OK);
     }
     // ------------------------update a Employee-------------------------
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
