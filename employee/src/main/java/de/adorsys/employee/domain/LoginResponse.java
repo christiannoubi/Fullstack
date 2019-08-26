@@ -5,7 +5,7 @@ public class LoginResponse {
 
     public LoginResponse() {}
 
-    public LoginResponse(boolean successfulLogged) {
+    public LoginResponse (boolean successfulLogged) {
         this.successfulLogged = successfulLogged;
     }
 

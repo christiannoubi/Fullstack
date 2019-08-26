@@ -29,20 +29,21 @@ services:
         - employee_network
 
    backend:
-        image: em-backend
+        image: local/em-backend
         build: ./employee
         environment:
           - timezone=Europe/Berlin
           - spring_datasource_url=jdbc:mysql://db:3306/db_employee
         depends_on:
           - db
+        restart: on-failure
         ports:
           - 8080:8080
         networks:
           - employee_network
 
    frontend:
-      image: em-frontend
+      image: local/em-frontend
       build: ./employee-app
       environment:
         - timezone=Europe/Berlin

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api")
+@RequestMapping("/api")
 public class LoginController {
 
     @Autowired
@@ -24,12 +24,12 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
-        Optional<Employee> optional = loginRepository.findByUsername(loginRequest.getUsername());
-        if (!optional.isPresent()) {
+        Optional<Employee> employee = loginRepository.findByUsername(loginRequest.getUsername());
+        if (!employee.isPresent()) {
             ResponseEntity.badRequest().body("Username does not exist!!!");
         }
-        Employee foundEmployee = optional.get();
+        Employee foundEmployee = employee.get();
         boolean result = loginRequest.getPassword().equals(foundEmployee.getPassword());
-        return result ? new ResponseEntity<>(new LoginResponse(true),HttpStatus.OK) : ResponseEntity.badRequest().body("Username and password does not match!!!");
+        return result ? new ResponseEntity<>(new LoginResponse(true), HttpStatus.OK) : ResponseEntity.badRequest().body("Username and password does not match!!!");
     }
 }
